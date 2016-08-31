@@ -10,6 +10,9 @@ namespace SlackConnector.Connections.Models
         [JsonProperty("is_archived")]
         public bool IsArchived { get; set; }
 
+        [JsonProperty("is_general ")]
+        public bool IsGeneral { get; set; }
+
         [JsonProperty("is_member")]
         public bool IsMember { get; set; }  
     }

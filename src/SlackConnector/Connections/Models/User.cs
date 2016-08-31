@@ -6,6 +6,8 @@ namespace SlackConnector.Connections.Models
     {
         public bool Deleted { get; set; }
 
+        public string Color { get; set; }
+
         public Profile Profile { get; set; }
 
         [JsonProperty("is_admin")]

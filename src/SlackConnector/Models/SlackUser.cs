@@ -1,4 +1,6 @@
-﻿namespace SlackConnector.Models
+﻿using System.Collections.Generic;
+
+namespace SlackConnector.Models
 {
     public class SlackUser
     {
@@ -16,6 +18,8 @@
                 return string.Empty;
             }
         }
+
+        public Dictionary<string, string> Icons { get; set; }
 
         //public bool IsSlackbot
         //{

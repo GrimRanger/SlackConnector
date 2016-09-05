@@ -4,7 +4,7 @@ using SlackConnector.Connections.Models;
 namespace SlackConnector.Connections.Clients.Api.Responces.Info
 {
     [RequestPath("user.info")]
-    internal class UserInfoResponse : ApiResponce
+    internal class UserInfoResponse : ApiResponceWithParametres
     {
         public User User { get; set; }
     }

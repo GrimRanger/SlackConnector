@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using SlackConnector.BotHelpers;
 using SlackConnector.Connections;
 using SlackConnector.Connections.Clients.Api;
-using SlackConnector.Connections.Clients.Api.Responces;
+using SlackConnector.Connections.Clients.Api.Responces.Info;
+using SlackConnector.Connections.Clients.Api.Responces.List;
 using SlackConnector.Connections.Clients.Channel;
 using SlackConnector.Connections.Models;
 using SlackConnector.Connections.Sockets;
@@ -79,13 +80,10 @@ namespace SlackConnector
 
             var message = new SlackMessage
             {
-                User = new SlackUser
-                {
-                    Id = inboundMessage.User,
-                    Name = GetMessageUsername(inboundMessage),
-                },
+                User = GetUser(inboundMessage.User).Result,
                 Text = inboundMessage.Text,
-                ChatHub = inboundMessage.Channel == null ? null : _connectedHubs[inboundMessage.Channel],
+                ChatHub = GetChatHub(inboundMessage.Channel).Result,
+               
                 RawData = inboundMessage.RawData,
                 MentionsBot = _mentionDetector.WasBotMentioned(Self.Name, Self.Id, inboundMessage.Text)
             };
@@ -93,17 +91,44 @@ namespace SlackConnector
             await RaiseMessageReceived(message);
         }
 
-        private string GetMessageUsername(InboundMessage inboundMessage)
+        private async Task<SlackChatHub> GetChatHub(string channelId)
         {
-            string username = string.Empty;
-
-            if (!string.IsNullOrEmpty(inboundMessage.User) && UserNameCache.ContainsKey(inboundMessage.User))
+            var cachedChannel = channelId == null ? null : _connectedHubs[channelId];
+            if (cachedChannel == null)
             {
-                username = UserNameCache[inboundMessage.User];
+                var apiClient = _connectionFactory.CreateApiClient();
+                var channelIdParameter = new KeyValuePair<string, string>("channel", channelId);
+                var respose = await apiClient.SendRequest<ChannelInfoResponse>(SlackKey, channelIdParameter);
+                var channel = respose.Channel;
+                var result = new SlackChatHub
+                {
+                    Id = channel.Id,
+                    Name = channel.Name,
+                };
+
+                return result;
             }
 
-            return username;
+            return cachedChannel;
         }
+
+        private async Task<SlackUser> GetUser(string userId)
+        {
+            var apiClient = _connectionFactory.CreateApiClient();
+
+            var userIdParameter = new KeyValuePair<string, string>("user", userId);
+            var respose = await apiClient.SendRequest<UserInfoResponse>(SlackKey, userIdParameter);
+            var user = respose.User;
+            var result = new SlackUser
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Icons = user.Profile.Icons
+            };
+
+            return result;
+        }
+       
 
         public void Disconnect()
         {
@@ -126,10 +151,15 @@ namespace SlackConnector
 
         public void SendApi(string command)
         {
-            var result1 = _connectionFactory.CreateApiClient().Send<ChannelListResponce>(SlackKey).Result;
-            var result2 = _connectionFactory.CreateApiClient().Send<DirectMessageConversationListResponse>(SlackKey).Result;
-            var result3 = _connectionFactory.CreateApiClient().Send<GroupListResponse>(SlackKey).Result;
-            var result4 = _connectionFactory.CreateApiClient().Send<UserListResponse>(SlackKey).Result;
+            //var result1 = _connectionFactory.CreateApiClient().SendRequest<ChannelListResponce>(SlackKey).Result;
+            //var result2 = _connectionFactory.CreateApiClient().SendRequest<DirectMessageConversationListResponse>(SlackKey).Result;
+            //var result3 = _connectionFactory.CreateApiClient().SendRequest<GroupListResponse>(SlackKey).Result;
+            //var result4 = _connectionFactory.CreateApiClient().SendRequest<UserListResponse>(SlackKey).Result;
+
+            //var result5 = _connectionFactory.CreateApiClient().SendRequest<BotInfoResponse>(SlackKey, new KeyValuePair<string, string>[1]).Result;
+            //var result6 = _connectionFactory.CreateApiClient().SendRequest<ChannelInfoResponse>(SlackKey, new KeyValuePair<string, string>[1]).Result;
+            //var result7 = _connectionFactory.CreateApiClient().SendRequest<GroupInfoResponse>(SlackKey, new KeyValuePair<string, string>[1]).Result;
+            //var result8 = _connectionFactory.CreateApiClient().SendRequest<UserInfoResponse>(SlackKey, new KeyValuePair<string, string>[1]).Result;
         }
 
         //TODO: Cache newly created channel, and return if already exists

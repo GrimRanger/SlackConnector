@@ -55,17 +55,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connections\Clients\Api\ApiClient.cs" />
-    <Compile Include="Connections\Clients\Api\Responces\ApiResponce.cs" />
+    <Compile Include="Connections\Clients\Api\Responces\ApiResponceWithParametres.cs" />
+    <Compile Include="Connections\Clients\Api\Responces\ApiResponceWithoutParametres.cs" />
     <Compile Include="Connections\Clients\Api\IApiClient.cs" />
     <Compile Include="BotHelpers\MentionDetector.cs" />
     <Compile Include="BotHelpers\ChatHubInterpreter.cs" />
     <Compile Include="BotHelpers\IMentionDetector.cs" />
     <Compile Include="BotHelpers\IChatHubInterpreter.cs" />
     <Compile Include="Connections\Clients\Api\Helpers\RequestPath.cs" />
-    <Compile Include="Connections\Clients\Api\Responces\ChannelListResponce.cs" />
-    <Compile Include="Connections\Clients\Api\Responces\DirectMessageConversationListResponse.cs" />
-    <Compile Include="Connections\Clients\Api\Responces\GroupListResponse.cs" />
-    <Compile Include="Connections\Clients\Api\Responces\UserListResponse.cs" />
+    <Compile Include="Connections\Clients\Api\Responces\Info\BotInfoResponse.cs" />
+    <Compile Include="Connections\Clients\Api\Responces\Info\ChannelInfoResponse.cs" />
+    <Compile Include="Connections\Clients\Api\Responces\List\ChannelListResponce.cs" />
+    <Compile Include="Connections\Clients\Api\Responces\List\DirectMessageConversationListResponse.cs" />
+    <Compile Include="Connections\Clients\Api\Responces\Info\GroupInfoResponse.cs" />
+    <Compile Include="Connections\Clients\Api\Responces\List\GroupListResponse.cs" />
+    <Compile Include="Connections\Clients\Api\Responces\Info\UserInfoResponse.cs" />
+    <Compile Include="Connections\Clients\Api\Responces\List\UserListResponse.cs" />
     <Compile Include="Connections\Clients\IRequestExecutor.cs" />
     <Compile Include="Connections\Clients\RequestExecutor.cs" />
     <Compile Include="Connections\ConnectionFactory.cs" />

@@ -25,6 +25,6 @@ namespace SlackConnector.Connections.Models
 
         public string Phone { get; set; }
 
-        public Dictionary<string,string> Icons { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string,string> Icons { get; } = new Dictionary<string, string>();
     }
 }

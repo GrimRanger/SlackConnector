@@ -4,7 +4,7 @@ using SlackConnector.Connections.Models;
 namespace SlackConnector.Connections.Clients.Api.Responces.List
 {
     [RequestPath("users.list")]
-    class UserListResponse : ApiResponce
+    class UserListResponse : ApiResponceWithoutParametres
     {
         public User[] Members { get; set; }
     }

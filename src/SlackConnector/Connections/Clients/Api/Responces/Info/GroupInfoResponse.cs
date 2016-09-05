@@ -4,7 +4,7 @@ using SlackConnector.Connections.Models;
 namespace SlackConnector.Connections.Clients.Api.Responces.Info
 {
     [RequestPath("groups.info")]
-    internal class GroupInfoResponse : ApiResponce
+    internal class GroupInfoResponse : ApiResponceWithParametres
     {
         public Group Group { get; set; }
     }

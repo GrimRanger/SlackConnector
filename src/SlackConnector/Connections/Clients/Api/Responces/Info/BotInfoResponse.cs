@@ -4,7 +4,7 @@ using SlackConnector.Connections.Models;
 namespace SlackConnector.Connections.Clients.Api.Responces.Info
 {
     [RequestPath("bots.info")]
-    internal class BotInfoResponse : ApiResponce
+    internal class BotInfoResponse : ApiResponceWithParametres
     {
         public Bot Bot { get; set; }
     }

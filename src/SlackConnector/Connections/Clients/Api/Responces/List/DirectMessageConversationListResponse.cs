@@ -4,7 +4,7 @@ using SlackConnector.Connections.Models;
 namespace SlackConnector.Connections.Clients.Api.Responces.List
 {
     [RequestPath("im.list")]
-    internal class DirectMessageConversationListResponse : ApiResponce
+    internal class DirectMessageConversationListResponse : ApiResponceWithoutParametres
     {
         public Im[] Ims { get; set; }
     }

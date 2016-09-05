@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SlackConnector.BotHelpers;
 using SlackConnector.Connections;
-using SlackConnector.Connections.Clients;
+using SlackConnector.Connections.Clients.Api;
+using SlackConnector.Connections.Clients.Api.Responces;
 using SlackConnector.Connections.Clients.Channel;
 using SlackConnector.Connections.Models;
 using SlackConnector.Connections.Sockets;
@@ -22,10 +23,11 @@ namespace SlackConnector
         private readonly IMentionDetector _mentionDetector;
         private IWebSocketClient _webSocketClient;
 
-        private Dictionary<string, SlackChatHub> _connectedHubs { get; set; }
+        private Dictionary<string, SlackChatHub> _connectedHubs;
+        public IApiClient ApiClient => _connectionFactory.CreateApiClient();
         public IReadOnlyDictionary<string, SlackChatHub> ConnectedHubs => _connectedHubs;
 
-        private Dictionary<string, string> _userNameCache { get; set; }
+        private Dictionary<string, string> _userNameCache;
         public IReadOnlyDictionary<string, string> UserNameCache => _userNameCache;
 
         public bool IsConnected => ConnectedSince.HasValue;
@@ -60,6 +62,7 @@ namespace SlackConnector
             _webSocketClient.OnMessage += async (sender, message) => await ListenTo(message);
 
             ConnectedSince = DateTime.Now;
+           
         }
 
         private async Task ListenTo(InboundMessage inboundMessage)
@@ -67,8 +70,6 @@ namespace SlackConnector
             if (inboundMessage?.MessageType != MessageType.Message)
                 return;
             if (string.IsNullOrEmpty(inboundMessage.User))
-                return;
-            if (!string.IsNullOrEmpty(Self.Id) && inboundMessage.User == Self.Id)
                 return;
 
             if (inboundMessage.Channel != null && !_connectedHubs.ContainsKey(inboundMessage.Channel))
@@ -121,6 +122,14 @@ namespace SlackConnector
 
             var client = _connectionFactory.CreateChatClient();
             await client.PostMessage(SlackKey, message.ChatHub.Id, message.Text, message.Attachments);
+        }
+
+        public void SendApi(string command)
+        {
+            var result1 = _connectionFactory.CreateApiClient().Send<ChannelListResponce>(SlackKey).Result;
+            var result2 = _connectionFactory.CreateApiClient().Send<DirectMessageConversationListResponse>(SlackKey).Result;
+            var result3 = _connectionFactory.CreateApiClient().Send<GroupListResponse>(SlackKey).Result;
+            var result4 = _connectionFactory.CreateApiClient().Send<UserListResponse>(SlackKey).Result;
         }
 
         //TODO: Cache newly created channel, and return if already exists

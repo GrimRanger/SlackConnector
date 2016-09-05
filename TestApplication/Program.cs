@@ -9,19 +9,21 @@ namespace Test
 {
     class Program
     {
+        private static Tester tester;
         static void Main(string[] args)
         {
-            var tester = new Tester("xoxb-58920871859-7CQkuNtclvv7z2NCEAySoQHf");
+            tester = new Tester("xoxb-58920871859-7CQkuNtclvv7z2NCEAySoQHf");
             tester.Start();
             tester.MessageReceived += OnMessageReceived;
+            tester.TestApi();
 
-            while(true)
+            while (true)
             { }
         }
 
         private static void OnMessageReceived(object sender, SlackMessage e)
         {
-            Console.WriteLine(e);
+            tester.SendData(new BotMessage {Text = "test", ChatHub = e.ChatHub});
         }
     }
 }

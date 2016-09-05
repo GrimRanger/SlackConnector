@@ -1,4 +1,5 @@
-﻿using SlackConnector.Connections.Clients.Channel;
+﻿using SlackConnector.Connections.Clients.Api;
+using SlackConnector.Connections.Clients.Channel;
 using SlackConnector.Connections.Clients.Chat;
 using SlackConnector.Connections.Clients.Handshake;
 using SlackConnector.Connections.Sockets;
@@ -11,5 +12,6 @@ namespace SlackConnector.Connections
         IHandshakeClient CreateHandshakeClient();
         IChatClient CreateChatClient();
         IChannelClient CreateChannelClient();
+        IApiClient CreateApiClient();
     }
 }

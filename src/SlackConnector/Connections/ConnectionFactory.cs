@@ -1,4 +1,5 @@
 ﻿using SlackConnector.Connections.Clients;
+using SlackConnector.Connections.Clients.Api;
 using SlackConnector.Connections.Clients.Channel;
 using SlackConnector.Connections.Clients.Chat;
 using SlackConnector.Connections.Clients.Handshake;
@@ -36,6 +37,11 @@ namespace SlackConnector.Connections
         public IChannelClient CreateChannelClient()
         {
             return new ChannelClient(_requestExecutor);
+        }
+
+        public IApiClient CreateApiClient()
+        {
+            return new ApiClient(_requestExecutor);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SlackConnector.Connections.Clients.Api;
 using SlackConnector.EventHandlers;
 using SlackConnector.Models;
 
@@ -30,6 +31,11 @@ namespace SlackConnector.Tests.Unit.Stubs
         }
 
         public Task Say(BotMessage message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SendApi(string command)
         {
             throw new NotImplementedException();
         }

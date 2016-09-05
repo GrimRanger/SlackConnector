@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SlackConnector;
+using SlackConnector.Connections.Clients.Api;
 using SlackConnector.Models;
 
 namespace Test
@@ -22,6 +23,7 @@ namespace Test
         public event EventHandler DisconnectHandler;
         public event EventHandler<ErrorEventArgs> ErrorHandler;
 
+
         public Tester(string slackToken)
         {
             _firstStart = true;
@@ -29,11 +31,11 @@ namespace Test
             _slackBot = new SlackConnector.SlackConnector();
         }
 
-        public async void Start()
+        public  void Start()
         {
             try
             {
-                _connection = await _slackBot.Connect(SlackToken);
+                _connection = _slackBot.Connect(SlackToken).Result;
                 if (!_firstStart)
                     return;
 
@@ -48,6 +50,10 @@ namespace Test
             }
         }
 
+        public void TestApi()
+        {
+            _connection.SendApi("channels.list");
+        }
         public void Stop()
         {
             try
@@ -61,7 +67,7 @@ namespace Test
             }
         }
 
-        public async void SendData(SlackChatHub chatHub, BotMessage message)
+        public async void SendData(BotMessage message)
         {
             try
             {

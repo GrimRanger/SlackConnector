@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SlackConnector.BotHelpers;
 using SlackConnector.Connections;
 using SlackConnector.Connections.Models;
 using SlackConnector.Connections.Responses;
@@ -17,14 +18,19 @@ namespace SlackConnector
 
         private readonly IConnectionFactory _connectionFactory;
         private readonly ISlackConnectionFactory _slackConnectionFactory;
+        private readonly ICachedDataProvider _cachedDataProvider;
 
-        public SlackConnector() : this(new ConnectionFactory(), new SlackConnectionFactory())
+        public SlackConnector() : this(new ConnectionFactory(), new SlackConnectionFactory(), new CachedDataProvider())
         { }
 
         internal SlackConnector(IConnectionFactory connectionFactory, ISlackConnectionFactory slackConnectionFactory)
+            : this(connectionFactory, slackConnectionFactory, new CachedDataProvider()) { }
+
+        internal SlackConnector(IConnectionFactory connectionFactory, ISlackConnectionFactory slackConnectionFactory, ICachedDataProvider cachedDataProvider)
         {
             _connectionFactory = connectionFactory;
             _slackConnectionFactory = slackConnectionFactory;
+            _cachedDataProvider = cachedDataProvider;
         }
 
         public async Task<ISlackConnection> Connect(string slackKey, ProxySettings proxySettings = null)
@@ -47,7 +53,7 @@ namespace SlackConnector
                 SlackKey = slackKey,
                 Self = new ContactDetails { Id = handshakeResponse.Self.Id, Name = handshakeResponse.Self.Name },
                 Team = new ContactDetails { Id = handshakeResponse.Team.Id, Name = handshakeResponse.Team.Name },
-                Users = GenerateUsers(handshakeResponse.Users),
+                Users = GenerateUsers(handshakeResponse),
                 SlackChatHubs = GetChatHubs(handshakeResponse),
                 WebSocket = await GetWebSocket(handshakeResponse, proxySettings)
             };
@@ -62,9 +68,34 @@ namespace SlackConnector
             return webSocketClient;
         }
 
-        private Dictionary<string, string> GenerateUsers(User[] users)
+        private Dictionary<string, SlackUser> GenerateUsers(HandshakeResponse handshakeResponse)
         {
-            return users.ToDictionary(user => user.Id, user => user.Name);
+            var users = new Dictionary<string, SlackUser>();
+            foreach (var user in handshakeResponse.Users)
+            {
+                var slackUser = new SlackUser
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    IsBot = false,
+                    Icons = user.Profile.Icons
+                };
+                users.Add(user.Id, slackUser);
+            }
+
+            foreach (var bot in handshakeResponse.Bots)
+            {
+                var slackUser = new SlackUser
+                {
+                    Id = bot.Id,
+                    Name = bot.Name,
+                    IsBot = true,
+                    Icons = bot.Icons
+                };
+                users.Add(bot.Id, slackUser);
+            }
+
+            return users;
         }
 
         private Dictionary<string, SlackChatHub> GetChatHubs(HandshakeResponse handshakeResponse)
@@ -75,14 +106,7 @@ namespace SlackConnector
             {
                 if (channel.IsMember)
                 {
-                    var newChannel = new SlackChatHub
-                    {
-                        Id = channel.Id,
-                        Name = "#" + channel.Name,
-                        Type = SlackChatHubType.Channel
-                    };
-
-                    hubs.Add(channel.Id, newChannel);
+                    hubs.Add(channel.Id, _cachedDataProvider.GetChatHub(channel));
                 }
             }
 
@@ -90,28 +114,15 @@ namespace SlackConnector
             {
                 if (group.Members.Any(x => x == handshakeResponse.Self.Id))
                 {
-                    var newGroup = new SlackChatHub
-                    {
-                        Id = group.Id,
-                        Name = "#" + group.Name,
-                        Type = SlackChatHubType.Group
-                    };
-
-                    hubs.Add(group.Id, newGroup);
+                    hubs.Add(group.Id, _cachedDataProvider.GetChatHub(group));
                 }
             }
 
             foreach (Im im in handshakeResponse.Ims)
             {
                 User user = handshakeResponse.Users.FirstOrDefault(x => x.Id == im.User);
-                var dm = new SlackChatHub
-                {
-                    Id = im.Id,
-                    Name = "@" + (user == null ? im.User : user.Name),
-                    Type = SlackChatHubType.DM
-                };
-
-                hubs.Add(im.Id, dm);
+                var userName = user?.Name;
+                hubs.Add(im.Id, _cachedDataProvider.GetChatHub(im, userName));
             }
 
             return hubs;

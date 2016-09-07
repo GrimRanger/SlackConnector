@@ -8,6 +8,6 @@ namespace SlackConnector.Connections.Models
     [JsonConverter(typeof(BotsConverter))]
     internal class Bot : Detail
     {
-        public Dictionary<string, string> ImageLinks { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> Icons { get; set; } = new Dictionary<string, string>();
     }
 }

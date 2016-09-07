@@ -50,10 +50,6 @@ namespace Test
             }
         }
 
-        public void TestApi()
-        {
-            _connection.SendApi("channels.list");
-        }
         public void Stop()
         {
             try
@@ -79,10 +75,10 @@ namespace Test
             }
         }
 
-        public string FindUserById(string id)
+        public SlackUser FindUserById(string id)
         {
-            if (_connection.UserNameCache.ContainsKey(id))
-                return _connection.UserNameCache[id];
+            if (_connection.UserCache.ContainsKey(id))
+                return _connection.UserCache[id];
 
             return null;
         }

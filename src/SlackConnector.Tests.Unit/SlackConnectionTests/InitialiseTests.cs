@@ -19,7 +19,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
                 {
                     Self = new ContactDetails { Id = "self-id" },
                     Team = new ContactDetails { Id = "team-id" },
-                    Users = new Dictionary<string, string> { { "userid", "userName" } },
+                    Users = new Dictionary<string, SlackUser> { { "userid", new SlackUser {Name = "userName" }  } },
                     SlackChatHubs = new Dictionary<string, SlackChatHub> { { "some-hub", new SlackChatHub() } },
                     WebSocket = GetMockFor<IWebSocketClient>().Object
                 };
@@ -45,7 +45,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
             [Test]
             public void then_should_populate_users()
             {
-                SUT.UserNameCache.ShouldEqual(Info.Users);
+                SUT.UserCache.ShouldEqual(Info.Users);
             }
 
             [Test]

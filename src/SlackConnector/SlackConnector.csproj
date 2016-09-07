@@ -54,6 +54,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BotHelpers\CachedDataProvider.cs" />
+    <Compile Include="BotHelpers\SlackInfoSearcher.cs" />
     <Compile Include="Connections\Clients\Api\ApiClient.cs" />
     <Compile Include="Connections\Clients\Api\Responces\ApiResponceWithParametres.cs" />
     <Compile Include="Connections\Clients\Api\Responces\ApiResponceWithoutParametres.cs" />

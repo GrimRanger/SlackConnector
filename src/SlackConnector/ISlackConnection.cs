@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SlackConnector.Connections.Clients.Api;
 using SlackConnector.EventHandlers;
 using SlackConnector.Models;
 
@@ -18,7 +17,7 @@ namespace SlackConnector
         /// <summary>
         /// UserId => UserName cache.
         /// </summary>
-        IReadOnlyDictionary<string, string> UserNameCache { get; }
+        IReadOnlyDictionary<string, SlackUser> UserCache { get; }
 
         /// <summary>
         /// Is the RealTimeConnection currently open?
@@ -56,11 +55,6 @@ namespace SlackConnector
         /// Send message to Slack channel.
         /// </summary>
         Task Say(BotMessage message);
-
-        /// <summary>
-        /// Send api to Slack.
-        /// </summary>
-        void SendApi(string command);
 
         /// <summary>
         /// Opens a DM channel to a user. Required to PM someone.

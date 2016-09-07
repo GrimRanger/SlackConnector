@@ -7,6 +7,8 @@ namespace SlackConnector.Models
         public string Id { get; set; }
         public string Name { get; set; }
 
+        public bool IsBot { get; set; }
+
         public string FormattedUserId
         {
             get
@@ -20,10 +22,5 @@ namespace SlackConnector.Models
         }
 
         public Dictionary<string, string> Icons { get; set; }
-
-        //public bool IsSlackbot
-        //{
-        //    get { return Id == "USLACKBOT"; }
-        //}
     }
 }

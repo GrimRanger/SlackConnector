@@ -19,7 +19,7 @@ namespace SlackConnector.Connections.Models.JsonConverters
                     {
                         if (icon.Path.Contains("image_"))
                         {
-                            target.ImageLinks.Add(icon.Path, icon.Value<string>());
+                            target.Icons.Add(icon.Path, icon.Value<string>());
                         }
                     }
                 }

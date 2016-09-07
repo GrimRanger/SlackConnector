@@ -16,6 +16,12 @@ namespace SlackConnector.Connections.Clients
             }
 
             var result = JsonConvert.DeserializeObject(response.Content, typeof (T)) as StandardResponse;
+
+            if (result?.Error != null && result.Error.Contains("_not_found"))
+            {
+                return null;
+            }
+
             if (!result.Ok)
             {
                 throw new CommunicationException($"Error occured while posting message '{result.Error}'");

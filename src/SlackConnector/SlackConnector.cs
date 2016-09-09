@@ -114,7 +114,11 @@ namespace SlackConnector
             {
                 if (group.Members.Any(x => x == handshakeResponse.Self.Id))
                 {
-                    hubs.Add(group.Id, _cachedDataProvider.GetChatHub(group));
+                    var users = new List<User>();
+                    foreach (var userId in group.Members)
+                        users.Add(handshakeResponse.Users.FirstOrDefault(x => x.Id == userId));
+                    var usersName = users.Select(x => x.Name);
+                    hubs.Add(group.Id, _cachedDataProvider.GetChatHub(group, usersName.ToArray()));
                 }
             }
 

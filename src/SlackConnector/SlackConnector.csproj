@@ -55,6 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BotHelpers\CachedDataProvider.cs" />
+    <Compile Include="BotHelpers\Interfaces\ICachedDataProvider.cs" />
+    <Compile Include="BotHelpers\Interfaces\ISlackInfoSearcher.cs" />
     <Compile Include="BotHelpers\SlackInfoSearcher.cs" />
     <Compile Include="Connections\Clients\Api\ApiClient.cs" />
     <Compile Include="Connections\Clients\Api\Responces\ApiResponceWithParametres.cs" />
@@ -62,8 +64,8 @@
     <Compile Include="Connections\Clients\Api\IApiClient.cs" />
     <Compile Include="BotHelpers\MentionDetector.cs" />
     <Compile Include="BotHelpers\ChatHubInterpreter.cs" />
-    <Compile Include="BotHelpers\IMentionDetector.cs" />
-    <Compile Include="BotHelpers\IChatHubInterpreter.cs" />
+    <Compile Include="BotHelpers\Interfaces\IMentionDetector.cs" />
+    <Compile Include="BotHelpers\Interfaces\IChatHubInterpreter.cs" />
     <Compile Include="Connections\Clients\Api\Helpers\RequestPath.cs" />
     <Compile Include="Connections\Clients\Api\Responces\Info\BotInfoResponse.cs" />
     <Compile Include="Connections\Clients\Api\Responces\Info\ChannelInfoResponse.cs" />

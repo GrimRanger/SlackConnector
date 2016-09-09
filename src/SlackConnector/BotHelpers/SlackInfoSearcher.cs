@@ -78,7 +78,14 @@ namespace SlackConnector.BotHelpers
             if (respose == null)
                 return null;
             var group = respose.Group;
-            var result = _cachedDataProvider.GetChatHub(group);
+            var usersName = new List<string>();
+            foreach (var userId in group.Members)
+            {
+                var user = await TryGetUser(apiClient, slackKey, userId);
+                usersName.Add(user.Name);
+
+            }
+            var result = _cachedDataProvider.GetChatHub(group, usersName.ToArray());
 
             return result;
         }

@@ -3,7 +3,7 @@ using SlackConnector.Models;
 
 namespace SlackConnector.BotHelpers
 {
-    internal class CachedDataProvider
+    internal class CachedDataProvider : ICachedDataProvider
     {
         public SlackChatHub GetChatHub(Channel channel)
         {
@@ -17,12 +17,13 @@ namespace SlackConnector.BotHelpers
             return newChannel;
         }
 
-        public SlackChatHub GetChatHub(Group group)
+        public SlackChatHub GetChatHub(Group group, string[] users)
         {
+            var name = users != null ? string.Join(", ", users) : group.Name;
             var newGroup = new SlackChatHub
             {
                 Id = group.Id,
-                Name = "#" + group.Name,
+                Name = "#" + name,
                 Type = SlackChatHubType.Group
             };
 

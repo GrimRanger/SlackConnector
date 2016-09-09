@@ -22,7 +22,7 @@ namespace Test
 
         private static void OnMessageReceived(object sender, SlackMessage e)
         {
-            tester.SendData(new BotMessage {Text = "test", ChatHub = e.ChatHub});
+            //tester.SendData(new BotMessage {Text = "test", ChatHub = e.ChatHub});
         }
     }
 }

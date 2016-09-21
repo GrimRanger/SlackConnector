@@ -67,6 +67,7 @@
     <Compile Include="BotHelpers\Interfaces\IMentionDetector.cs" />
     <Compile Include="BotHelpers\Interfaces\IChatHubInterpreter.cs" />
     <Compile Include="Connections\Clients\Api\Helpers\RequestPath.cs" />
+    <Compile Include="Connections\Clients\Api\Responces\History\ChannelsHistoryResponce.cs" />
     <Compile Include="Connections\Clients\Api\Responces\Info\BotInfoResponse.cs" />
     <Compile Include="Connections\Clients\Api\Responces\Info\ChannelInfoResponse.cs" />
     <Compile Include="Connections\Clients\Api\Responces\List\ChannelListResponce.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Connections\Models\JsonConverters\BotsConverter.cs" />
     <Compile Include="Connections\Models\JsonConverters\JsonCreationConverter.cs" />
     <Compile Include="Connections\Models\JsonConverters\ProfileConverter.cs" />
+    <Compile Include="Connections\Models\Message.cs" />
     <Compile Include="Connections\ProxySettings.cs" />
     <Compile Include="Connections\Responses\JoinChannelResponse.cs" />
     <Compile Include="Connections\Models\Profile.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="Connections\IRestSharpFactory.cs" />
     <Compile Include="Connections\Responses\StandardResponse.cs" />
     <Compile Include="Connections\RestSharpFactory.cs" />
+    <Compile Include="Connections\Sockets\Messages\Inbound\Message\BotInboundMessage.cs" />
     <Compile Include="Connections\Sockets\Messages\Outbound\BaseMessage.cs" />
     <Compile Include="Connections\Sockets\Messages\Outbound\TypingIndicatorMessage.cs" />
     <Compile Include="ConsoleLoggingLevel.cs" />
@@ -133,7 +136,7 @@
     <Compile Include="Models\SlackUser.cs" />
     <Compile Include="Connections\Sockets\IWebSocketClient.cs" />
     <Compile Include="Connections\Sockets\Messages\Inbound\IMessageInterpreter.cs" />
-    <Compile Include="Connections\Sockets\Messages\Inbound\InboundMessage.cs" />
+    <Compile Include="Connections\Sockets\Messages\Inbound\Message\InboundMessage.cs" />
     <Compile Include="Connections\Sockets\Messages\Inbound\MessageInterpreter.cs" />
     <Compile Include="Connections\Sockets\Messages\Inbound\MessageSubType.cs" />
     <Compile Include="Connections\Sockets\Messages\Inbound\MessageType.cs" />

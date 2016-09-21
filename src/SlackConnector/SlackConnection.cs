@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using SlackConnector.BotHelpers;
 using SlackConnector.BotHelpers.Interfaces;
 using SlackConnector.Connections;
 using SlackConnector.Connections.Clients.Api;
+using SlackConnector.Connections.Clients.Api.Responces.History;
 using SlackConnector.Connections.Clients.Channel;
 using SlackConnector.Connections.Models;
 using SlackConnector.Connections.Sockets;
@@ -87,7 +89,7 @@ namespace SlackConnector
             if (!string.IsNullOrEmpty(Self.Id) && inboundMessage.User == Self.Id)
                 return;
 
-            var message = new SlackMessage
+            SlackMessage message = new SlackMessage
             {
                 User = inboundMessage.User == null ? null : _userCache[inboundMessage.User],
                 Text = inboundMessage.Text,
@@ -97,6 +99,11 @@ namespace SlackConnector
                 MentionsBot = _mentionDetector.WasBotMentioned(Self.Name, Self.Id, inboundMessage.Text)
             };
 
+            if (inboundMessage.MessageSubType == MessageSubType.bot_message)
+            {
+                message.User.Name = ((BotInboundMessage) inboundMessage).UserName;
+            }
+            
             await RaiseMessageReceived(message);
         }
 
@@ -115,6 +122,23 @@ namespace SlackConnector
 
             return result;
         }
+
+        //private void GetChannelHistory()
+        //{
+        //    var apiClient = _connectionFactory.CreateApiClient();
+        //    var result =  apiClient.SendRequest<ChannelsHistoryResponce>(SlackKey, new KeyValuePair<string, string>("channel", "C0FB8PZQQ")).Result;
+        //    var first = result.Messages.First(t => t.Text == "");
+        //}
+
+        //private void Test()
+        //{
+        //    var text =
+        //        "{\"text\":\"\",\"username\":\"MasterCommander\",\"bot_id\":\"B0C48EWRF\",\"icons\":{\"emoji\":\":commanderadama:\"},\"attachments\":[{\"fallback\":\"Master has failed\",\"text\":\"Closed - Do not merge\",\"title\":\"Master has failed\",\"id\":1,\"color\":\"d00000\"}],\"type\":\"message\",\"subtype\":\"bot_message\",\"ts\":\"1474443609.000289\"}";
+        //    var interpeter = new MessageInterpreter();
+        //    var result = interpeter.InterpretMessage(text);
+        //    var check = ListenTo(result);
+        //    result.Text = result.Text + "";
+        //}
 
         public void Disconnect()
         {

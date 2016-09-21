@@ -13,6 +13,14 @@ namespace SlackConnector.Connections.Sockets.Messages.Inbound
             try
             {
                 message = JsonConvert.DeserializeObject<InboundMessage>(json);
+                switch (message?.MessageSubType)
+                {
+                    case MessageSubType.bot_message:
+                        {
+                            message = JsonConvert.DeserializeObject<BotInboundMessage>(json);
+                            break;
+                        }
+                }
 
                 if (message != null)
                 {

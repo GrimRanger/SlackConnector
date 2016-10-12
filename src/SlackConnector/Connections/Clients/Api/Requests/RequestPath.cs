@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace SlackConnector.Connections.Clients.Api.Helpers
+namespace SlackConnector.Connections.Clients.Api.Requests
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public class RequestPath : Attribute

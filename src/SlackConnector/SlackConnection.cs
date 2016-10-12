@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using SlackConnector.BotHelpers;
-using SlackConnector.BotHelpers.Interfaces;
 using SlackConnector.Connections;
-using SlackConnector.Connections.Clients.Api;
-using SlackConnector.Connections.Clients.Api.Responces.History;
 using SlackConnector.Connections.Clients.Channel;
+using SlackConnector.Connections.Clients.History;
+using SlackConnector.Connections.Clients.Info;
 using SlackConnector.Connections.Models;
 using SlackConnector.Connections.Sockets;
 using SlackConnector.Connections.Sockets.Messages.Inbound;
@@ -23,11 +21,9 @@ namespace SlackConnector
         private readonly IConnectionFactory _connectionFactory;
         private readonly IChatHubInterpreter _chatHubInterpreter;
         private readonly IMentionDetector _mentionDetector;
-        private readonly ISlackInfoSearcher _slackInfoSearcher;
         private IWebSocketClient _webSocketClient;
 
         private Dictionary<string, SlackChatHub> _connectedHubs;
-        public IApiClient ApiClient => _connectionFactory.CreateApiClient();
         public IReadOnlyDictionary<string, SlackChatHub> ConnectedHubs => _connectedHubs;
 
         private Dictionary<string, SlackUser> _userCache;
@@ -40,12 +36,14 @@ namespace SlackConnector
         public ContactDetails Team { get; private set; }
         public ContactDetails Self { get; private set; }
 
-        public SlackConnection(IConnectionFactory connectionFactory, IChatHubInterpreter chatHubInterpreter, IMentionDetector mentionDetector, ISlackInfoSearcher slackInfoSearcher)
+        public IHistoryClient HistoryClient => _connectionFactory.CreateHistoryClient();
+        public IInfoClient InfoClient => _connectionFactory.CreateInfoClient();
+
+        public SlackConnection(IConnectionFactory connectionFactory, IChatHubInterpreter chatHubInterpreter, IMentionDetector mentionDetector)
         {
             _connectionFactory = connectionFactory;
             _chatHubInterpreter = chatHubInterpreter;
             _mentionDetector = mentionDetector;
-            _slackInfoSearcher = slackInfoSearcher;
         }
 
         public void Initialise(ConnectionInformation connectionInformation)
@@ -109,36 +107,19 @@ namespace SlackConnector
 
         private async Task<SlackChatHub> GetChatHub(string chatHubid)
         {
-            var apiClient = _connectionFactory.CreateApiClient();
-            var result = await _slackInfoSearcher.GetChatHub(apiClient, SlackKey, chatHubid);
+            var infoClient = _connectionFactory.CreateInfoClient();
+            var result = await infoClient.GetChatHub(SlackKey, chatHubid);
 
             return result;
         }
 
         private async Task<SlackUser> GetUser(string userId)
         {
-            var apiClient = _connectionFactory.CreateApiClient();
-            var result = await _slackInfoSearcher.GetUser(apiClient, SlackKey, userId);
+            var infoClient = _connectionFactory.CreateInfoClient();
+            var result = await infoClient.GetUser(SlackKey, userId);
 
             return result;
         }
-
-        //private void GetChannelHistory()
-        //{
-        //    var apiClient = _connectionFactory.CreateApiClient();
-        //    var result =  apiClient.SendRequest<ChannelsHistoryResponce>(SlackKey, new KeyValuePair<string, string>("channel", "C0FB8PZQQ")).Result;
-        //    var first = result.Messages.First(t => t.Text == "");
-        //}
-
-        //private void Test()
-        //{
-        //    var text =
-        //        "{\"text\":\"\",\"username\":\"MasterCommander\",\"bot_id\":\"B0C48EWRF\",\"icons\":{\"emoji\":\":commanderadama:\"},\"attachments\":[{\"fallback\":\"Master has failed\",\"text\":\"Closed - Do not merge\",\"title\":\"Master has failed\",\"id\":1,\"color\":\"d00000\"}],\"type\":\"message\",\"subtype\":\"bot_message\",\"ts\":\"1474443609.000289\"}";
-        //    var interpeter = new MessageInterpreter();
-        //    var result = interpeter.InterpretMessage(text);
-        //    var check = ListenTo(result);
-        //    result.Text = result.Text + "";
-        //}
 
         public void Disconnect()
         {

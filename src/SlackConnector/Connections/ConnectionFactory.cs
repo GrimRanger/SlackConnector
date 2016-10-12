@@ -1,8 +1,11 @@
 ﻿using SlackConnector.Connections.Clients;
-using SlackConnector.Connections.Clients.Api;
+using SlackConnector.Connections.Clients.Api.HighLevelClient;
+using SlackConnector.Connections.Clients.Api.LowLevelClient;
 using SlackConnector.Connections.Clients.Channel;
 using SlackConnector.Connections.Clients.Chat;
 using SlackConnector.Connections.Clients.Handshake;
+using SlackConnector.Connections.Clients.History;
+using SlackConnector.Connections.Clients.Info;
 using SlackConnector.Connections.Sockets;
 using SlackConnector.Connections.Sockets.Messages.Inbound;
 
@@ -39,9 +42,24 @@ namespace SlackConnector.Connections
             return new ChannelClient(_requestExecutor);
         }
 
-        public IApiClient CreateApiClient()
+        public ILowLevelApiClient CreateLowLevelApiClient()
         {
-            return new ApiClient(_requestExecutor);
+            return new LowLevelApiClient(_requestExecutor);
+        }
+
+        public IHighLevelApiClient CreateHighLevelApiClient()
+        {
+            return new HighLevelApiClient(CreateLowLevelApiClient());
+        }
+
+        public IInfoClient CreateInfoClient()
+        {
+            return new InfoClient(CreateHighLevelApiClient());
+        }
+
+        public IHistoryClient CreateHistoryClient()
+        {
+            return new HistoryClient(CreateHighLevelApiClient(), CreateInfoClient());
         }
     }
 }

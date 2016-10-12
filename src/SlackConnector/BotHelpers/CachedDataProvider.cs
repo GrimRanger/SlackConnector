@@ -1,4 +1,5 @@
-﻿using SlackConnector.Connections.Models;
+﻿using SlackConnector.BotHelpers.Interfaces;
+using SlackConnector.Connections.Models;
 using SlackConnector.Models;
 
 namespace SlackConnector.BotHelpers

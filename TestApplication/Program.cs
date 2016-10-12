@@ -15,7 +15,7 @@ namespace Test
             tester = new Tester("xoxb-58920871859-7CQkuNtclvv7z2NCEAySoQHf");
             tester.Start();
             tester.MessageReceived += OnMessageReceived;
-
+            tester.Test();
             while (true)
             { }
         }

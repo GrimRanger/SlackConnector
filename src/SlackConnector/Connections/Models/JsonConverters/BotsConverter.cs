@@ -11,6 +11,7 @@ namespace SlackConnector.Connections.Models.JsonConverters
             var target = new Bot();
 
             JToken icons;
+            
             if (jObject.TryGetValue("icons", out icons))
             {
                 foreach (var iconProperties in icons.Children())

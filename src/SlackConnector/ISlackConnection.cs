@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SlackConnector.Connections.Clients.History;
+using SlackConnector.Connections.Clients.Info;
 using SlackConnector.EventHandlers;
 using SlackConnector.Models;
 
@@ -46,6 +48,16 @@ namespace SlackConnector
 
         #endregion
         
+        /// <summary>
+        /// Client for getting info about users and chathubs.
+        /// </summary>
+        IInfoClient InfoClient { get; }
+
+        /// <summary>
+        ///  Client for getting history.
+        /// </summary>
+        IHistoryClient HistoryClient { get; }
+      
         /// <summary>
         /// Disconnect from Slack.
         /// </summary>

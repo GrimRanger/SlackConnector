@@ -96,5 +96,10 @@ namespace Test
         protected void OnErrorEventHandler(object sender, Exception ex, string message)
         {
         }
+
+        public void Test()
+        {
+           // _connection.GetChannelHistory();
+        }
     }
 }

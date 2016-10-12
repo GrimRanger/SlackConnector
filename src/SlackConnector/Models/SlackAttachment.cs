@@ -47,8 +47,12 @@ namespace SlackConnector.Models
         [JsonProperty(PropertyName = "thumb_url")]
         public string ThumbUrl { get; set; }
 
+        [JsonProperty(PropertyName = "mrkdwn_in")]
+        public IList<string> MrkdwnIn { get; set; }
+
         public SlackAttachment()
         {
+            MrkdwnIn = new List<string> { "text", "pretext", "fields" };
             Fields = new List<SlackAttachmentField>();
         }
     }

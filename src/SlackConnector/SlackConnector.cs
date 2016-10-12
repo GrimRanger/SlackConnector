@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SlackConnector.BotHelpers;
+using SlackConnector.BotHelpers.Interfaces;
 using SlackConnector.Connections;
 using SlackConnector.Connections.Models;
 using SlackConnector.Connections.Responses;

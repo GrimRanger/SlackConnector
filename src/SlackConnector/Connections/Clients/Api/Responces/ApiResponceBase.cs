@@ -2,7 +2,7 @@
 
 namespace SlackConnector.Connections.Clients.Api.Responces
 {
-    internal abstract class ApiResponceWithoutParametres : StandardResponse
+    internal abstract class ApiResponceBase : StandardResponse
     {
     }
 }

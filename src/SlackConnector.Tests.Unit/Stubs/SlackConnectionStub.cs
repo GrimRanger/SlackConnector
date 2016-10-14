@@ -25,6 +25,12 @@ namespace SlackConnector.Tests.Unit.Stubs
             throw new NotImplementedException();
         }
 
+
+        public Task<IEnumerable<SlackMessage>> GetHistory(SlackChatHub slackChatHub, int count)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Disconnect()
         {
             throw new NotImplementedException();
@@ -57,6 +63,12 @@ namespace SlackConnector.Tests.Unit.Stubs
         }
 
         public event MessageReceivedEventHandler OnMessageReceived;
+        public event ChannelJoinedEventHandler OnChannelJoined;
+        public string Test(string text)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RaiseOnMessageReceived()
         {
             OnMessageReceived?.Invoke(null);

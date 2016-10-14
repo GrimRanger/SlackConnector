@@ -3,6 +3,9 @@
     internal enum MessageType
     {
         Unknown = 0,
-        Message
+        Message,
+        mpim_joined,
+        group_joined,
+        channel_joined,
     }
 }

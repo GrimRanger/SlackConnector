@@ -13,7 +13,7 @@ namespace SlackConnector.Connections.Sockets
         Task SendMessage(BaseMessage message);
         void Close();
 
-        event EventHandler<InboundMessage> OnMessage;
+        event EventHandler<InboundData> OnMessage;
         event EventHandler OnClose;
     }
 }

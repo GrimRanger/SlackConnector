@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using SlackConnector.Models;
 
 namespace SlackConnector.Connections.Clients.Info

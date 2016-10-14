@@ -1,4 +1,5 @@
-﻿using SlackConnector.Connections.Clients;
+﻿using System.Collections.Generic;
+using SlackConnector.Connections.Clients;
 using SlackConnector.Connections.Clients.Api.HighLevelClient;
 using SlackConnector.Connections.Clients.Api.LowLevelClient;
 using SlackConnector.Connections.Clients.Channel;
@@ -8,6 +9,7 @@ using SlackConnector.Connections.Clients.History;
 using SlackConnector.Connections.Clients.Info;
 using SlackConnector.Connections.Sockets;
 using SlackConnector.Connections.Sockets.Messages.Inbound;
+using SlackConnector.Models;
 
 namespace SlackConnector.Connections
 {
@@ -52,14 +54,16 @@ namespace SlackConnector.Connections
             return new HighLevelApiClient(CreateLowLevelApiClient());
         }
 
-        public IInfoClient CreateInfoClient()
+        public IInfoClient CreateInfoClient(IReadOnlyDictionary<string, SlackChatHub> connectedHubs = null, IReadOnlyDictionary<string, SlackUser> userCache = null)
         {
-            return new InfoClient(CreateHighLevelApiClient());
+            return new InfoClient(CreateHighLevelApiClient(), connectedHubs, userCache);
         }
 
-        public IHistoryClient CreateHistoryClient()
+        public IHistoryClient CreateHistoryClient(IInfoClient infoClient = null)
         {
-            return new HistoryClient(CreateHighLevelApiClient(), CreateInfoClient());
+            if (infoClient == null)
+                infoClient = CreateInfoClient();
+            return new HistoryClient(CreateHighLevelApiClient(), infoClient);
         }
     }
 }

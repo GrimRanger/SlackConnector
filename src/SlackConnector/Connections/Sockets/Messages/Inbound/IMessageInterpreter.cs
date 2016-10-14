@@ -2,6 +2,6 @@
 {
     internal interface IMessageInterpreter
     {
-        InboundMessage InterpretMessage(string json);
+        InboundData InterpretMessage(string json);
     }
 }

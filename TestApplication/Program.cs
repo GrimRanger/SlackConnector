@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SlackConnector.Models;
+﻿using SlackConnector.Models;
 
-namespace Test
+namespace TestApplication
 {
     class Program
     {
-        private static Tester tester;
-        static void Main(string[] args)
+        private static Tester _tester;
+        static void Main()
         {
-            tester = new Tester("xoxb-58920871859-7CQkuNtclvv7z2NCEAySoQHf");
-            tester.Start();
-            tester.MessageReceived += OnMessageReceived;
-            tester.Test();
+            _tester = new Tester("xoxb-58920871859-7CQkuNtclvv7z2NCEAySoQHf");
+            _tester.Start();
+            _tester.MessageReceived += OnMessageReceived;
+            _tester.Test();
             while (true)
             { }
         }

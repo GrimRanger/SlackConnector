@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using SlackConnector.BotHelpers;
 using SlackConnector.Connections;
 using SlackConnector.Connections.Clients.Channel;
-using SlackConnector.Connections.Clients.History;
-using SlackConnector.Connections.Clients.Info;
 using SlackConnector.Connections.Models;
 using SlackConnector.Connections.Sockets;
+using SlackConnector.Connections.Sockets.Messages;
 using SlackConnector.Connections.Sockets.Messages.Inbound;
+using SlackConnector.Connections.Sockets.Messages.Inbound.Event;
 using SlackConnector.Connections.Sockets.Messages.Outbound;
 using SlackConnector.EventHandlers;
 using SlackConnector.Exceptions;
@@ -22,6 +22,7 @@ namespace SlackConnector
         private readonly IChatHubInterpreter _chatHubInterpreter;
         private readonly IMentionDetector _mentionDetector;
         private IWebSocketClient _webSocketClient;
+        private IInboundDataVisitor _inboundDataVisitor;
 
         private Dictionary<string, SlackChatHub> _connectedHubs;
         public IReadOnlyDictionary<string, SlackChatHub> ConnectedHubs => _connectedHubs;
@@ -36,8 +37,6 @@ namespace SlackConnector
         public ContactDetails Team { get; private set; }
         public ContactDetails Self { get; private set; }
 
-        public IHistoryClient HistoryClient => _connectionFactory.CreateHistoryClient();
-        public IInfoClient InfoClient => _connectionFactory.CreateInfoClient();
 
         public SlackConnection(IConnectionFactory connectionFactory, IChatHubInterpreter chatHubInterpreter, IMentionDetector mentionDetector)
         {
@@ -66,14 +65,20 @@ namespace SlackConnector
             ConnectedSince = DateTime.Now;
         }
 
-        private async Task ListenTo(InboundMessage inboundMessage)
+        private async Task ListenTo(InboundData inboundData)
         {
-            if (inboundMessage?.MessageType != MessageType.Message)
+           if (inboundData == null || inboundData.MessageType == MessageType.Unknown)
                 return;
+
+            _inboundDataVisitor = new InboundDataVisitor(this);
+            await inboundData.Accept(_inboundDataVisitor);
+        }
+
+        internal async Task HandleInboundData(InboundMessage inboundMessage)
+        {
             if (string.IsNullOrEmpty(inboundMessage.User))
                 return;
 
-            await GetChatHub(inboundMessage.Channel);
             if (inboundMessage.Channel != null && !_connectedHubs.ContainsKey(inboundMessage.Channel))
             {
                 var chatHub = await GetChatHub(inboundMessage.Channel);
@@ -84,6 +89,7 @@ namespace SlackConnector
             {
                 _userCache[inboundMessage.User] = await GetUser(inboundMessage.User);
             }
+
             if (!string.IsNullOrEmpty(Self.Id) && inboundMessage.User == Self.Id)
                 return;
 
@@ -92,17 +98,23 @@ namespace SlackConnector
                 User = inboundMessage.User == null ? null : _userCache[inboundMessage.User],
                 Text = inboundMessage.Text,
                 ChatHub = inboundMessage.Channel == null ? null : _connectedHubs[inboundMessage.Channel],
-
+                Time = inboundMessage.Time,
                 RawData = inboundMessage.RawData,
                 MentionsBot = _mentionDetector.WasBotMentioned(Self.Name, Self.Id, inboundMessage.Text)
             };
 
             if (inboundMessage.MessageSubType == MessageSubType.bot_message)
             {
-                message.User.Name = ((BotInboundMessage) inboundMessage).UserName;
+                message.User.Name = ((BotInboundMessage)inboundMessage).UserName;
             }
-            
+
             await RaiseMessageReceived(message);
+        }
+
+        internal async Task HandleInboundData(InboundChatHubJoinedEvent inboundEvent)
+        {
+                var chatHub = await GetChatHub(inboundEvent.Channel.Id);
+                await RaiseChannelJoined(chatHub);
         }
 
         private async Task<SlackChatHub> GetChatHub(string chatHubid)
@@ -119,6 +131,13 @@ namespace SlackConnector
             var result = await infoClient.GetUser(SlackKey, userId);
 
             return result;
+        }
+
+        public async Task<IEnumerable<SlackMessage>> GetHistory(SlackChatHub slackChatHub, int count)
+        {
+            var infoClient = _connectionFactory.CreateInfoClient(ConnectedHubs, UserCache);
+
+            return await _connectionFactory.CreateHistoryClient(infoClient).GetChatHubHistory(SlackKey, slackChatHub, count);
         }
 
         public void Disconnect()
@@ -184,6 +203,29 @@ namespace SlackConnector
                 try
                 {
                     await OnMessageReceived(message);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
+        }
+
+        public event ChannelJoinedEventHandler OnChannelJoined;
+        public string Test(string text)
+        {
+            var result = new MessageInterpreter().InterpretMessage(text);
+
+            return "";
+        }
+
+        private async Task RaiseChannelJoined(SlackChatHub chatHub)
+        {
+            if (OnChannelJoined != null)
+            {
+                try
+                {
+                    await OnChannelJoined(chatHub);
                 }
                 catch (Exception)
                 {

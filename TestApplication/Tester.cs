@@ -1,33 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SlackConnector;
-using SlackConnector.Connections.Clients.Api;
 using SlackConnector.Models;
 
-namespace Test
+namespace TestApplication
 {
     class Tester
     {
         private bool _firstStart;
         private readonly ISlackConnector _slackBot;
+        private readonly string _slackToken;
         private ISlackConnection _connection;
-
-        public string SlackToken { get; }
         public bool IsConected => _connection != null && _connection.IsConnected;
 
         public event EventHandler<SlackMessage> MessageReceived;
         public event EventHandler DisconnectHandler;
-        public event EventHandler<ErrorEventArgs> ErrorHandler;
 
 
         public Tester(string slackToken)
         {
             _firstStart = true;
-            SlackToken = slackToken;
+            _slackToken = slackToken;
             _slackBot = new SlackConnector.SlackConnector();
         }
 
@@ -35,7 +29,7 @@ namespace Test
         {
             try
             {
-                _connection = _slackBot.Connect(SlackToken).Result;
+                _connection = _slackBot.Connect(_slackToken).Result;
                 if (!_firstStart)
                     return;
 
@@ -99,7 +93,10 @@ namespace Test
 
         public void Test()
         {
-           // _connection.GetChannelHistory();
+            var slackHub = _connection.ConnectedHubs.FirstOrDefault();
+            var text =
+                "{\"type\":\"mpim_joined\",\"channel\":{\"id\":\"G2PDUCQK0\",\"name\":\"mpdm-commander--alexeyo--archiver--kirillv-1\",\"is_group\":true,\"created\":1476451460,\"creator\":\"U1P6RLGJG\",\"is_archived\":false,\"is_mpim\":true,\"is_open\":false,\"last_read\":\"0000000000.000000\",\"latest\":null,\"unread_count\":0,\"unread_count_display\":0,\"members\":[\"U1P6RLGJG\",\"U1QT2RMR9\",\"U1R8NMKTP\",\"U0FC1HP61\"],\"topic\":{\"value\":\"Group messaging\",\"creator\":\"U1P6RLGJG\",\"last_set\":1476451460},\"purpose\":{\"value\":\"Group messaging with: @commander @alexeyo @archiver @kirillv\",\"creator\":\"U1P6RLGJG\",\"last_set\":1476451460}}}";
+            var t = _connection.Test(text);
         }
     }
 }

@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace SlackConnector.Connections.Models.JsonConverters
 {
-    internal class BotsConverter : JsonCreationConverter<Bot>
+    internal class BotConverter : JsonCreationConverter<Bot>
     {
         protected override Bot Create(Type objectType, JObject jObject)
         {

@@ -76,7 +76,8 @@ namespace SlackConnector.Connections.Clients.History
                 {
                     Text = message.Text,
                     ChatHub = chatHub,
-                    User = user
+                    User = user,
+                    RawData = message.RawData
                 };
                 result.Add(slackMessage);
             }

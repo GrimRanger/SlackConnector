@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SlackConnector.Connections.Clients.History;
-using SlackConnector.Connections.Clients.Info;
 using SlackConnector.EventHandlers;
 using SlackConnector.Models;
 
@@ -47,17 +45,12 @@ namespace SlackConnector
         ContactDetails Self { get; }
 
         #endregion
-        
-        /// <summary>
-        /// Client for getting info about users and chathubs.
-        /// </summary>
-        IInfoClient InfoClient { get; }
 
         /// <summary>
-        ///  Client for getting history.
+        ///  Get history from Slack channel.
         /// </summary>
-        IHistoryClient HistoryClient { get; }
-      
+        Task<IEnumerable<SlackMessage>> GetHistory(SlackChatHub slackChatHub, int count);
+
         /// <summary>
         /// Disconnect from Slack.
         /// </summary>
@@ -87,5 +80,12 @@ namespace SlackConnector
         /// Raised when real-time messages are received.
         /// </summary>
         event MessageReceivedEventHandler OnMessageReceived;
+
+        /// <summary>
+        /// Raised when bot joined to channel.
+        /// </summary>
+        event ChannelJoinedEventHandler OnChannelJoined;
+
+        string Test(string text);
     }
 }

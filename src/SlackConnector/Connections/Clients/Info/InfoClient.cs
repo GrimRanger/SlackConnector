@@ -11,18 +11,29 @@ namespace SlackConnector.Connections.Clients.Info
     {
         private readonly IHighLevelApiClient _highLevelApiClient;
         private readonly ICachedDataProvider _cachedDataProvider;
+        private IReadOnlyDictionary<string, SlackChatHub> _hubCache;
+        private IReadOnlyDictionary<string, SlackUser> _userCache;
 
         public InfoClient(IHighLevelApiClient highLevelApiClient) : this(new CachedDataProvider(), highLevelApiClient)
         { }
 
-        public InfoClient(ICachedDataProvider cachedDataProvider, IHighLevelApiClient highLevelApiClient)
+        public InfoClient(IHighLevelApiClient highLevelApiClient, IReadOnlyDictionary<string, SlackChatHub> connectedHubs = null, IReadOnlyDictionary<string, SlackUser> userCache = null) :
+            this(new CachedDataProvider(), highLevelApiClient, connectedHubs, userCache)
+        { }
+
+        public InfoClient(ICachedDataProvider cachedDataProvider, IHighLevelApiClient highLevelApiClient, IReadOnlyDictionary<string, SlackChatHub> hubCache = null, IReadOnlyDictionary<string, SlackUser> userCache = null) 
         {
             _highLevelApiClient = highLevelApiClient;
             _cachedDataProvider = cachedDataProvider;
+            _hubCache = hubCache;
+            _userCache = userCache;
         }
 
         public async Task<SlackChatHub> GetChatHub(string slackKey, string id)
         {
+            if (_hubCache != null && _hubCache.ContainsKey(id))
+                return _hubCache[id];
+
             var result = await TryGetChannel(slackKey, id);
             if (result == null)
                 result = await TryGetDirectMessageConversation(slackKey, id);
@@ -34,6 +45,8 @@ namespace SlackConnector.Connections.Clients.Info
 
         public async Task<SlackUser> GetUser(string slackKey, string userId)
         {
+            if (_userCache != null && _userCache.ContainsKey(userId))
+                return _userCache[userId];
             var result = await TryGetUser(slackKey, userId);
             if (result == null)
                 result = await TryGetBot(slackKey, userId);
@@ -43,7 +56,7 @@ namespace SlackConnector.Connections.Clients.Info
 
         private async Task<SlackChatHub> TryGetChannel(string slackKey, string channelId)
         {
-           
+
             var respose = await _highLevelApiClient.GetChannelInfo(slackKey, channelId);
             if (respose == null)
                 return null;

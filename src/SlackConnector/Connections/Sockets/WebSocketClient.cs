@@ -30,7 +30,7 @@ namespace SlackConnector.Connections.Sockets
 
         public bool IsAlive => _webSocket.IsAlive;
 
-        public event EventHandler<InboundMessage> OnMessage;
+        public event EventHandler<InboundData> OnMessage;
         public event EventHandler OnClose;
         
         public async Task Connect()
@@ -73,8 +73,8 @@ namespace SlackConnector.Connections.Sockets
         private void WebSocketOnMessage(object sender, MessageEventArgs args)
         {
             string messageJson = args?.Data ?? "";
-            InboundMessage inboundMessage = _interpreter.InterpretMessage(messageJson);
-            OnMessage?.Invoke(sender, inboundMessage);
+            InboundData inboundData = _interpreter.InterpretMessage(messageJson);
+            OnMessage?.Invoke(sender, inboundData);
         }
     }
 }

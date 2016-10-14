@@ -28,7 +28,7 @@ namespace SlackConnector.Tests.Unit.Connections.Sockets.Messages
 
         protected override void When()
         {
-            Result = SUT.InterpretMessage(Json);
+            Result = (InboundMessage)SUT.InterpretMessage(Json);
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace SlackConnector.Tests.Unit.Connections.Sockets.Messages
 
         protected override void When()
         {
-            Result = SUT.InterpretMessage(Json);
+            Result = (InboundMessage)SUT.InterpretMessage(Json);
         }
 
         [Test]
@@ -88,7 +88,7 @@ namespace SlackConnector.Tests.Unit.Connections.Sockets.Messages
 
         protected override void When()
         {
-            Result = SUT.InterpretMessage(Json);
+            Result = (InboundMessage)SUT.InterpretMessage(Json);
         }
 
         [Test]

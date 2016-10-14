@@ -12,7 +12,7 @@ namespace SlackConnector.Tests.Unit.Stubs
         public bool IsAlive { get; set; }
         public int CurrentMessageId { get; set; }
 
-        public event EventHandler<InboundMessage> OnMessage;
+        public event EventHandler<InboundData> OnMessage;
         public void RaiseOnMessage(InboundMessage message)
         {
             OnMessage.Invoke(this, message);

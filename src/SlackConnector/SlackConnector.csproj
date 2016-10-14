@@ -95,8 +95,9 @@
     <Compile Include="Connections\Clients\ResponseVerifier.cs" />
     <Compile Include="Connections\Models\Bot.cs" />
     <Compile Include="Connections\Models\Group.cs" />
-    <Compile Include="Connections\Models\JsonConverters\BotsConverter.cs" />
+    <Compile Include="Connections\Models\JsonConverters\BotConverter.cs" />
     <Compile Include="Connections\Models\JsonConverters\JsonCreationConverter.cs" />
+    <Compile Include="Connections\Models\JsonConverters\MessageConverter.cs" />
     <Compile Include="Connections\Models\JsonConverters\ProfileConverter.cs" />
     <Compile Include="Connections\Models\Message.cs" />
     <Compile Include="Connections\ProxySettings.cs" />
@@ -106,10 +107,16 @@
     <Compile Include="Connections\IRestSharpFactory.cs" />
     <Compile Include="Connections\Responses\StandardResponse.cs" />
     <Compile Include="Connections\RestSharpFactory.cs" />
+    <Compile Include="Connections\Sockets\Messages\IInboundDataVisitor.cs" />
+    <Compile Include="Connections\Sockets\Messages\Inbound\Event\InboundChatHubJoinedEvent.cs" />
     <Compile Include="Connections\Sockets\Messages\Inbound\Message\BotInboundMessage.cs" />
+    <Compile Include="Connections\Sockets\Messages\Inbound\InboundData.cs" />
+    <Compile Include="Connections\Sockets\Messages\Inbound\StandardInboundData.cs" />
     <Compile Include="Connections\Sockets\Messages\Outbound\BaseMessage.cs" />
     <Compile Include="Connections\Sockets\Messages\Outbound\TypingIndicatorMessage.cs" />
+    <Compile Include="Connections\Sockets\Messages\InboundDataVisitor.cs" />
     <Compile Include="ConsoleLoggingLevel.cs" />
+    <Compile Include="EventHandlers\ChannelJoinedEventHandler.cs" />
     <Compile Include="EventHandlers\DisconnectEventHandler.cs" />
     <Compile Include="Exceptions\AlreadyConnectedException.cs" />
     <Compile Include="Exceptions\CommunicationException.cs" />
@@ -137,6 +144,7 @@
     <Compile Include="Models\SlackChatHub.cs" />
     <Compile Include="Models\SlackChatHubType.cs" />
     <Compile Include="Serialising\EnumConverter.cs" />
+    <Compile Include="Serialising\TimeStampConverter.cs" />
     <Compile Include="SlackConnection.cs" />
     <Compile Include="Models\SlackMessage.cs" />
     <Compile Include="Models\SlackUser.cs" />

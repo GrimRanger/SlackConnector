@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SlackConnector.Connections.Sockets;
+using SlackConnector.Connections.Sockets.Client;
 
 namespace SlackConnector.Models
 {

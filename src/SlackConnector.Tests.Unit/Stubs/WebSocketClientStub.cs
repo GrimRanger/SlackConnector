@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SlackConnector.Connections.Sockets;
-using SlackConnector.Connections.Sockets.Messages;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
-using SlackConnector.Connections.Sockets.Messages.Outbound;
+using SlackConnector.Connections.Sockets.Client;
+using SlackConnector.Connections.Sockets.Data.Inbound;
 
 namespace SlackConnector.Tests.Unit.Stubs
 {
@@ -12,10 +10,10 @@ namespace SlackConnector.Tests.Unit.Stubs
         public bool IsAlive { get; set; }
         public int CurrentMessageId { get; set; }
 
-        public event EventHandler<InboundData> OnMessage;
-        public void RaiseOnMessage(InboundMessage message)
+        public event EventHandler<IInboundMessage> OnMessage;
+        public void RaiseOnMessage(UserInboundMessage userInboundMessage)
         {
-            OnMessage.Invoke(this, message);
+            OnMessage.Invoke(this, userInboundMessage);
         }
 
         public event EventHandler OnClose;
@@ -29,8 +27,8 @@ namespace SlackConnector.Tests.Unit.Stubs
             return Task.Factory.StartNew(() => { });
         }
 
-        public BaseMessage SendMessage_Message { get; private set; }
-        public Task SendMessage(BaseMessage message)
+        public global::SlackConnector.Connections.Sockets.Data.Outbound.BaseMessage SendMessage_Message { get; private set; }
+        public Task SendMessage(global::SlackConnector.Connections.Sockets.Data.Outbound.BaseMessage message)
         {
             SendMessage_Message = message;
             return Task.Factory.StartNew(() => { });

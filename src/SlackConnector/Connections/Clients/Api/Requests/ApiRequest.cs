@@ -5,7 +5,7 @@ namespace SlackConnector.Connections.Clients.Api.Requests
 {
     internal class ApiRequest<T> where T : ApiResponceBase
     {
-        public KeyValuePair<string, string>[] Parameters;
+        public readonly KeyValuePair<string, string>[] Parameters;
 
         public ApiRequest(params KeyValuePair<string, string>[]  parameters)
         {

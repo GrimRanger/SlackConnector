@@ -8,17 +8,17 @@ namespace SlackConnector
     {
         public static IEnumerable<SlackChatHub> ConnectedDMs(this ISlackConnection slackConnection)
         {
-            return slackConnection.ConnectedHubs.Values.Where(hub => hub.Type == SlackChatHubType.DM);
+            return slackConnection.HubCache.Values.Where(hub => hub.Type == SlackChatHubType.DM);
         }
 
         public static IEnumerable<SlackChatHub> ConnectedChannels(this ISlackConnection slackConnection)
         {
-            return slackConnection.ConnectedHubs.Values.Where(hub => hub.Type == SlackChatHubType.Channel);
+            return slackConnection.HubCache.Values.Where(hub => hub.Type == SlackChatHubType.Channel);
         }
 
         public static IEnumerable<SlackChatHub> ConnectedGroups(this ISlackConnection slackConnection)
         {
-            return slackConnection.ConnectedHubs.Values.Where(hub => hub.Type == SlackChatHubType.Group);
+            return slackConnection.HubCache.Values.Where(hub => hub.Type == SlackChatHubType.Group);
         }
     }
 }

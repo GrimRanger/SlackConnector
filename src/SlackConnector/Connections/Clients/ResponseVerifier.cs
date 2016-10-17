@@ -22,7 +22,7 @@ namespace SlackConnector.Connections.Clients
                 return null;
             }
 
-            if (!result.Ok)
+            if (result != null && !result.Ok)
             {
                 throw new CommunicationException($"Error occured while posting message '{result.Error}'");
             }

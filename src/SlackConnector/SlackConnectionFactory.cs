@@ -1,5 +1,5 @@
 ﻿using SlackConnector.BotHelpers;
-using SlackConnector.Connections;
+using SlackConnector.Connections.ClientFactories;
 using SlackConnector.Models;
 
 namespace SlackConnector

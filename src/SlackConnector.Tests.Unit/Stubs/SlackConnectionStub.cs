@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SlackConnector.Connections.Clients.Api;
 using SlackConnector.EventHandlers;
 using SlackConnector.Models;
 
@@ -13,7 +12,7 @@ namespace SlackConnector.Tests.Unit.Stubs
         public IEnumerable<SlackChatHub> ConnectedDMs { get; }
         public IEnumerable<SlackChatHub> ConnectedChannels { get; }
         public IEnumerable<SlackChatHub> ConnectedGroups { get; }
-        public IReadOnlyDictionary<string, SlackChatHub> ConnectedHubs { get; }
+        public IReadOnlyDictionary<string, SlackChatHub> HubCache { get; }
         public IReadOnlyDictionary<string, SlackUser> UserCache { get; }
         public bool IsConnected { get; }
         public DateTime? ConnectedSince { get; }

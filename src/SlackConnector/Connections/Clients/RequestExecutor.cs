@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using RestSharp;
+using SlackConnector.Connections.ClientFactories;
 
 namespace SlackConnector.Connections.Clients
 {

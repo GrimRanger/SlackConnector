@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using SlackConnector.BotHelpers;
 using SlackConnector.BotHelpers.Interfaces;
 using SlackConnector.Connections;
+using SlackConnector.Connections.ClientFactories;
 using SlackConnector.Connections.Models;
 using SlackConnector.Connections.Responses;
-using SlackConnector.Connections.Sockets;
+using SlackConnector.Connections.Sockets.Client;
 using SlackConnector.Exceptions;
 using SlackConnector.Models;
 
@@ -79,7 +80,7 @@ namespace SlackConnector
                     Id = user.Id,
                     Name = user.Name,
                     IsBot = false,
-                    Icons = user.Profile.Icons
+                    Icons = user.Profile?.Icons
                 };
                 users.Add(user.Id, slackUser);
             }
@@ -118,8 +119,8 @@ namespace SlackConnector
                     var users = new List<User>();
                     foreach (var userId in group.Members)
                         users.Add(handshakeResponse.Users.FirstOrDefault(x => x.Id == userId));
-                    var usersName = users.Select(x => x.Name);
-                    hubs.Add(group.Id, _cachedDataProvider.GetChatHub(group, usersName.ToArray()));
+                    var usersName = users.Select(x => x?.Name);
+                    hubs.Add(group.Id, _cachedDataProvider.GetChatHub(group, usersName?.ToArray()));
                 }
             }
 

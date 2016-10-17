@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Should;
-using SlackConnector.Connections.Sockets;
+using SlackConnector.Connections.Sockets.Client;
 using SlackConnector.Models;
 using SpecsFor;
 

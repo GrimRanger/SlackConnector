@@ -10,7 +10,6 @@ namespace TestApplication
             _tester = new Tester("xoxb-58920871859-7CQkuNtclvv7z2NCEAySoQHf");
             _tester.Start();
             _tester.MessageReceived += OnMessageReceived;
-            _tester.Test();
             while (true)
             { }
         }

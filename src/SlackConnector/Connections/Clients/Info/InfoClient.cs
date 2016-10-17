@@ -11,17 +11,17 @@ namespace SlackConnector.Connections.Clients.Info
     {
         private readonly IHighLevelApiClient _highLevelApiClient;
         private readonly ICachedDataProvider _cachedDataProvider;
-        private IReadOnlyDictionary<string, SlackChatHub> _hubCache;
-        private IReadOnlyDictionary<string, SlackUser> _userCache;
+        private readonly IDictionary<string, SlackChatHub> _hubCache;
+        private readonly IDictionary<string, SlackUser> _userCache;
 
         public InfoClient(IHighLevelApiClient highLevelApiClient) : this(new CachedDataProvider(), highLevelApiClient)
         { }
 
-        public InfoClient(IHighLevelApiClient highLevelApiClient, IReadOnlyDictionary<string, SlackChatHub> connectedHubs = null, IReadOnlyDictionary<string, SlackUser> userCache = null) :
-            this(new CachedDataProvider(), highLevelApiClient, connectedHubs, userCache)
+        public InfoClient(IHighLevelApiClient highLevelApiClient, IDictionary<string, SlackChatHub> hubCache = null, IDictionary<string, SlackUser> userCache = null) :
+            this(new CachedDataProvider(), highLevelApiClient, hubCache, userCache)
         { }
 
-        public InfoClient(ICachedDataProvider cachedDataProvider, IHighLevelApiClient highLevelApiClient, IReadOnlyDictionary<string, SlackChatHub> hubCache = null, IReadOnlyDictionary<string, SlackUser> userCache = null) 
+        public InfoClient(ICachedDataProvider cachedDataProvider, IHighLevelApiClient highLevelApiClient, IDictionary<string, SlackChatHub> hubCache = null, IDictionary<string, SlackUser> userCache = null)
         {
             _highLevelApiClient = highLevelApiClient;
             _cachedDataProvider = cachedDataProvider;
@@ -40,6 +40,8 @@ namespace SlackConnector.Connections.Clients.Info
             if (result == null)
                 result = await TryGetGroup(slackKey, id);
 
+            _hubCache?.Add(result.Id, result);
+
             return result;
         }
 
@@ -50,6 +52,8 @@ namespace SlackConnector.Connections.Clients.Info
             var result = await TryGetUser(slackKey, userId);
             if (result == null)
                 result = await TryGetBot(slackKey, userId);
+
+            _userCache?.Add(result.Id, result);
 
             return result;
         }

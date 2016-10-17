@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace SlackConnector.Connections.Models.JsonConverters
+namespace SlackConnector.Serialising
 {
     internal abstract class JsonCreationConverter<T> : JsonConverter
     {

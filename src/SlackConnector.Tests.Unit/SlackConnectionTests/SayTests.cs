@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using SlackConnector.Connections;
-using SlackConnector.Connections.Clients;
+using SlackConnector.Connections.ClientFactories;
 using SlackConnector.Connections.Clients.Chat;
-using SlackConnector.Connections.Sockets;
+using SlackConnector.Connections.Sockets.Client;
 using SlackConnector.Exceptions;
 using SlackConnector.Models;
 using SpecsFor;

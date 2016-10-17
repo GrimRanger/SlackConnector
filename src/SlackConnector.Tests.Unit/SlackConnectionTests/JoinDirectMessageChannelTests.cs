@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using Moq;
 using NUnit.Framework;
-using SlackConnector.Connections;
-using SlackConnector.Connections.Clients;
+using SlackConnector.Connections.ClientFactories;
 using SlackConnector.Connections.Clients.Channel;
 using SlackConnector.Connections.Models;
 using SlackConnector.Models;

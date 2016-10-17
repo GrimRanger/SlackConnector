@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Should;
 using SlackConnector.Connections.Sockets;
+using SlackConnector.Connections.Sockets.Client;
 using SlackConnector.Models;
 using SpecsFor;
 
@@ -51,7 +52,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
             [Test]
             public void then_should_slack_hubs()
             {
-                SUT.ConnectedHubs.ShouldEqual(Info.SlackChatHubs);
+                SUT.HubCache.ShouldEqual(Info.SlackChatHubs);
             }
 
             [Test]

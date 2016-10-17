@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using SlackConnector;
 using SlackConnector.Models;
@@ -87,16 +86,8 @@ namespace TestApplication
             return Task.Run(() => MessageReceived?.Invoke(null, message));
         }
 
-        protected void OnErrorEventHandler(object sender, Exception ex, string message)
+        private void OnErrorEventHandler(object sender, Exception ex, string message)
         {
-        }
-
-        public void Test()
-        {
-            var slackHub = _connection.ConnectedHubs.FirstOrDefault();
-            var text =
-                "{\"type\":\"mpim_joined\",\"channel\":{\"id\":\"G2PDUCQK0\",\"name\":\"mpdm-commander--alexeyo--archiver--kirillv-1\",\"is_group\":true,\"created\":1476451460,\"creator\":\"U1P6RLGJG\",\"is_archived\":false,\"is_mpim\":true,\"is_open\":false,\"last_read\":\"0000000000.000000\",\"latest\":null,\"unread_count\":0,\"unread_count_display\":0,\"members\":[\"U1P6RLGJG\",\"U1QT2RMR9\",\"U1R8NMKTP\",\"U0FC1HP61\"],\"topic\":{\"value\":\"Group messaging\",\"creator\":\"U1P6RLGJG\",\"last_set\":1476451460},\"purpose\":{\"value\":\"Group messaging with: @commander @alexeyo @archiver @kirillv\",\"creator\":\"U1P6RLGJG\",\"last_set\":1476451460}}}";
-            var t = _connection.Test(text);
         }
     }
 }

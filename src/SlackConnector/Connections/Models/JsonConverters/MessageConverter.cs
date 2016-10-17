@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json.Linq;
+using SlackConnector.Serialising;
 
 namespace SlackConnector.Connections.Models.JsonConverters
 {
@@ -7,9 +8,7 @@ namespace SlackConnector.Connections.Models.JsonConverters
     {
         protected override Message Create(Type objectType, JObject jObject)
         {
-            var target = new Message();
-
-            target.RawData = jObject.ToString();
+            var target = new Message {RawData = jObject.ToString()};
 
             return target;
         }

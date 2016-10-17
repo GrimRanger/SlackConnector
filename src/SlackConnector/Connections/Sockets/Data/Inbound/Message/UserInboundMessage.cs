@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SlackConnector.Connections.Sockets.Data.Visitors;
 using SlackConnector.Serialising;
 
-namespace SlackConnector.Connections.Sockets.Messages.Inbound
+namespace SlackConnector.Connections.Sockets.Data.Inbound
 {
-    internal class InboundMessage : InboundData
+    internal class UserInboundMessage : BaseInboundMessage
     {
         [JsonProperty("subtype")]
         [JsonConverter(typeof(EnumConverter))]
@@ -14,14 +15,14 @@ namespace SlackConnector.Connections.Sockets.Messages.Inbound
         public string Channel { get; set; }
         public string Text { get; set; }
         public string Team { get; set; }
-        public string RawData { get; set; }
+        
         [JsonProperty("ts")]
         [JsonConverter(typeof(TimeStampConverter))]
         public DateTime Time { get; set; }
 
         public override Task Accept(IInboundDataVisitor visitor)
         {
-            return visitor.HandleInboundMessage(this);
+            return visitor.HandleUserMessage(this);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using RestSharp;
 
-namespace SlackConnector.Connections
+namespace SlackConnector.Connections.ClientFactories
 {
     internal class RestSharpFactory : IRestSharpFactory
     {

@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Should;
 using SlackConnector.BotHelpers;
-using SlackConnector.Connections.Sockets;
-using SlackConnector.Connections.Sockets.Messages;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
+using SlackConnector.Connections.Sockets.Client;
+using SlackConnector.Connections.Sockets.Data.Inbound;
 using SlackConnector.Models;
 using SlackConnector.Tests.Unit.Stubs;
 using SpecsFor;
@@ -18,7 +17,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
     {
         internal class BaseTest : SpecsFor<SlackConnection>
         {
-            protected InboundMessage InboundMessage { get; set; }
+            protected UserInboundMessage UserInboundUserInboundMessage { get; set; }
             protected bool MessageRaised { get; set; }
             protected SlackMessage Result { get; set; }
             protected ConnectionInformation ConnectionInfo { get; set; }
@@ -39,7 +38,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
             {
                 SUT.Initialise(ConnectionInfo);
                 GetMockFor<IWebSocketClient>()
-                    .Raise(x => x.OnMessage += null, null, InboundMessage);
+                    .Raise(x => x.OnMessage += null, null, UserInboundUserInboundMessage);
             }
         }
 
@@ -49,9 +48,9 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
             {
                 base.Given();
 
-                ConnectionInfo.Users.Add("userABC", new SlackUser {Name = "i-have-a-name"});
+                ConnectionInfo.Users.Add("userABC", new SlackUser {Id = "userABC", Name = "i-have-a-name"});
 
-                InboundMessage = new InboundMessage
+                UserInboundUserInboundMessage = new UserInboundMessage
                 {
                     User = "userABC",
                     MessageType = MessageType.Message,
@@ -77,7 +76,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
                         Id = "userABC",
                         Name = "i-have-a-name"
                     },
-                    RawData = InboundMessage.RawData
+                    RawData = UserInboundUserInboundMessage.RawData
                 };
 
                 Result.ShouldLookLike(expected);
@@ -90,7 +89,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
             {
                 base.Given();
 
-                InboundMessage = new InboundMessage
+                UserInboundUserInboundMessage = new UserInboundMessage
                 {
                     User = "userABC",
                     MessageType = MessageType.Message
@@ -117,7 +116,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
         {
             protected override void Given()
             {
-                InboundMessage = new InboundMessage
+                UserInboundUserInboundMessage = new UserInboundMessage
                 {
                     MessageType = MessageType.Unknown
                 };
@@ -136,7 +135,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
         {
             protected override void Given()
             {
-                InboundMessage = null;
+                UserInboundUserInboundMessage = null;
 
                 base.Given();
             }
@@ -156,7 +155,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
 
                 ConnectionInfo.SlackChatHubs.Add("channelId", new SlackChatHub { Id = "channelId", Name = "NaMe23" });
 
-                InboundMessage = new InboundMessage
+                UserInboundUserInboundMessage = new UserInboundMessage
                 {
                     Channel = ConnectionInfo.SlackChatHubs.First().Key,
                     MessageType = MessageType.Message,
@@ -185,7 +184,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
                     .Setup(x => x.FromId(_hubId))
                     .Returns(_expectedChatHub);
 
-                InboundMessage = new InboundMessage
+                UserInboundUserInboundMessage = new UserInboundMessage
                 {
                     Channel = _hubId,
                     MessageType = MessageType.Message,
@@ -202,8 +201,8 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
             [Test]
             public void then_should_add_channel_to_connected_hubs()
             {
-                SUT.ConnectedHubs.ContainsKey(_hubId).ShouldBeTrue();
-                SUT.ConnectedHubs[_hubId].ShouldEqual(_expectedChatHub);
+                SUT.HubCache.ContainsKey(_hubId).ShouldBeTrue();
+                SUT.HubCache[_hubId].ShouldEqual(_expectedChatHub);
             }
         }
 
@@ -215,7 +214,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
 
                 ConnectionInfo.Self = new ContactDetails { Id = "self-id", Name = "self-name" };
                 
-                InboundMessage = new InboundMessage
+                UserInboundUserInboundMessage = new UserInboundMessage
                 {
                     Channel = "idy",
                     MessageType = MessageType.Message,
@@ -224,7 +223,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
                 };
 
                 GetMockFor<IMentionDetector>()
-                    .Setup(x => x.WasBotMentioned(ConnectionInfo.Self.Name, ConnectionInfo.Self.Id, InboundMessage.Text))
+                    .Setup(x => x.WasBotMentioned(ConnectionInfo.Self.Name, ConnectionInfo.Self.Id, UserInboundUserInboundMessage.Text))
                     .Returns(true);
             }
 
@@ -243,7 +242,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
 
                 ConnectionInfo.Self = new ContactDetails { Id = "self-id", Name = "self-name" };
                 
-                InboundMessage = new InboundMessage
+                UserInboundUserInboundMessage = new UserInboundMessage
                 {
                     MessageType = MessageType.Message,
                     User = ConnectionInfo.Self.Id
@@ -263,7 +262,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
             {
                 base.Given();
 
-                InboundMessage = new InboundMessage
+                UserInboundUserInboundMessage = new UserInboundMessage
                 {
                     MessageType = MessageType.Message,
                     User = null
@@ -298,7 +297,7 @@ namespace SlackConnector.Tests.Unit.SlackConnectionTests
             [Test]
             public void should_not_throw_exception_when_error_is_thrown()
             {
-                var message = new InboundMessage
+                var message = new UserInboundMessage
                 {
                     User = "something",
                     MessageType = MessageType.Message

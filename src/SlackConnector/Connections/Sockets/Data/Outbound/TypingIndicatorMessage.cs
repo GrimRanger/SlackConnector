@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SlackConnector.Connections.Sockets.Messages.Outbound
+namespace SlackConnector.Connections.Sockets.Data.Outbound
 {
     internal class TypingIndicatorMessage : BaseMessage
     {

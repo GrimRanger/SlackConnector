@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using SlackConnector.Connections.Sockets.Messages.Inbound;
-using SlackConnector.Connections.Sockets.Messages.Outbound;
+using SlackConnector.Connections.Sockets.Data.Inbound;
+using SlackConnector.Connections.Sockets.Data.Interpreters;
 using WebSocketSharp;
 
-namespace SlackConnector.Connections.Sockets
+namespace SlackConnector.Connections.Sockets.Client
 {
     internal class WebSocketClient : IWebSocketClient
     {
@@ -30,7 +30,7 @@ namespace SlackConnector.Connections.Sockets
 
         public bool IsAlive => _webSocket.IsAlive;
 
-        public event EventHandler<InboundData> OnMessage;
+        public event EventHandler<IInboundMessage> OnMessage;
         public event EventHandler OnClose;
         
         public async Task Connect()
@@ -43,7 +43,7 @@ namespace SlackConnector.Connections.Sockets
             await taskSource.Task;
         }
 
-        public async Task SendMessage(BaseMessage message)
+        public async Task SendMessage(Data.Outbound.BaseMessage message)
         {
             _currentMessageId++;
             message.Id = _currentMessageId;
@@ -73,8 +73,8 @@ namespace SlackConnector.Connections.Sockets
         private void WebSocketOnMessage(object sender, MessageEventArgs args)
         {
             string messageJson = args?.Data ?? "";
-            InboundData inboundData = _interpreter.InterpretMessage(messageJson);
-            OnMessage?.Invoke(sender, inboundData);
+            IInboundMessage baseMessage = _interpreter.InterpretMessage(messageJson);
+            OnMessage?.Invoke(sender, baseMessage);
         }
     }
 }

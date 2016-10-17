@@ -12,7 +12,7 @@ namespace SlackConnector
         /// <summary>
         /// All of the ChatHubs that are currently open.
         /// </summary>
-        IReadOnlyDictionary<string, SlackChatHub> ConnectedHubs { get; }
+        IReadOnlyDictionary<string, SlackChatHub> HubCache { get; }
 
         /// <summary>
         /// UserId => UserName cache.
@@ -72,20 +72,18 @@ namespace SlackConnector
         Task IndicateTyping(SlackChatHub chatHub);
 
         /// <summary>
-        /// Raised when the websocket disconnects from the mothership.
+        /// Raised when bot joined to channel.
         /// </summary>
-        event DisconnectEventHandler OnDisconnect;
-
+        event ChannelJoinedEventHandler OnChannelJoined;
+       
         /// <summary>
         /// Raised when real-time messages are received.
         /// </summary>
         event MessageReceivedEventHandler OnMessageReceived;
 
         /// <summary>
-        /// Raised when bot joined to channel.
+        /// Raised when the websocket disconnects from the mothership.
         /// </summary>
-        event ChannelJoinedEventHandler OnChannelJoined;
-
-        string Test(string text);
+        event DisconnectEventHandler OnDisconnect;
     }
 }

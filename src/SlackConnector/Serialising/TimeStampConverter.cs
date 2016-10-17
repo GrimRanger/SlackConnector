@@ -1,7 +1,5 @@
 ﻿using System;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SlackConnector.Connections.Models.JsonConverters;
 
 namespace SlackConnector.Serialising
 {
@@ -12,7 +10,7 @@ namespace SlackConnector.Serialising
             double value;
             if (double.TryParse(str, out value))
             {
-                DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+                DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
                 dtDateTime = dtDateTime.AddSeconds(Math.Round(value)).ToLocalTime();
 
                 return dtDateTime;

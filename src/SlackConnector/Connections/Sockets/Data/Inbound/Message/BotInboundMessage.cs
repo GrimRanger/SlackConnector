@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace SlackConnector.Connections.Sockets.Messages.Inbound
+namespace SlackConnector.Connections.Sockets.Data.Inbound
 {
-    internal class BotInboundMessage : InboundMessage
+    internal class BotInboundMessage : UserInboundMessage
     {
         [JsonProperty("bot_id")]
         public override string User { get; set; }

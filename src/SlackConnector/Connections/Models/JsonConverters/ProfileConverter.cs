@@ -1,6 +1,6 @@
 ﻿using System;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SlackConnector.Serialising;
 
 namespace SlackConnector.Connections.Models.JsonConverters
 {

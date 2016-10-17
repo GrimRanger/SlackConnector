@@ -7,9 +7,10 @@ using SlackConnector.Connections.Clients.Handshake;
 using SlackConnector.Connections.Clients.History;
 using SlackConnector.Connections.Clients.Info;
 using SlackConnector.Connections.Sockets;
+using SlackConnector.Connections.Sockets.Client;
 using SlackConnector.Models;
 
-namespace SlackConnector.Connections
+namespace SlackConnector.Connections.ClientFactories
 {
     internal interface IConnectionFactory
     {
@@ -19,7 +20,7 @@ namespace SlackConnector.Connections
         IChannelClient CreateChannelClient();
         ILowLevelApiClient CreateLowLevelApiClient();
         IHighLevelApiClient CreateHighLevelApiClient();
-        IInfoClient CreateInfoClient(IReadOnlyDictionary<string, SlackChatHub> connectedHubs = null, IReadOnlyDictionary<string, SlackUser> userCache = null);
+        IInfoClient CreateInfoClient(IDictionary<string, SlackChatHub> hubCache = null, IDictionary<string, SlackUser> userCache = null);
         IHistoryClient CreateHistoryClient(IInfoClient infoClient = null);
     }
 }

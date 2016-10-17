@@ -20,7 +20,10 @@ namespace SlackConnector.BotHelpers
 
         public SlackChatHub GetChatHub(Group group, string[] users)
         {
-            var name = users != null ? string.Join(", ", users) : group.Name;
+            var name = string.Join(", ", users);
+
+            if (string.IsNullOrEmpty(name))
+                name = group.Name;
             var newGroup = new SlackChatHub
             {
                 Id = group.Id,

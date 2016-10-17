@@ -3,6 +3,7 @@ using NUnit.Framework;
 using RestSharp;
 using Should;
 using SlackConnector.Connections;
+using SlackConnector.Connections.ClientFactories;
 using SlackConnector.Connections.Clients;
 using SlackConnector.Connections.Responses;
 using SpecsFor;

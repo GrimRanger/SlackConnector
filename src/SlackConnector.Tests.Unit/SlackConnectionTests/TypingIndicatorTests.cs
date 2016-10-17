@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using Moq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Should;
-using SlackConnector.Connections;
-using SlackConnector.Connections.Sockets;
-using SlackConnector.Connections.Sockets.Messages.Outbound;
+using SlackConnector.Connections.Sockets.Data.Outbound;
 using SlackConnector.Models;
 using SlackConnector.Tests.Unit.Stubs;
 using SpecsFor;

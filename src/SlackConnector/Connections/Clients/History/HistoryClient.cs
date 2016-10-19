@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SlackConnector.Connections.Clients.Api.HighLevelClient;
 using SlackConnector.Connections.Clients.Api.Responces.History;
@@ -77,7 +78,8 @@ namespace SlackConnector.Connections.Clients.History
                     Text = message.Text,
                     ChatHub = chatHub,
                     User = user,
-                    RawData = message.RawData
+                    RawData = message.RawData,
+                    Time = message.Time
                 };
                 result.Add(slackMessage);
             }
